@@ -13,6 +13,7 @@ getCharacterButton.addEventListener('click', () => {
     fetch(getCharacterURL+charName)
     .then(response => response.json())
     .then(data => {
+        console.log(data)
         showCharacters(data, showCharacterData);
     })
     .catch(err => showCharacterData.innerHTML = `${charName} isn't in our database.`);
@@ -28,7 +29,6 @@ getAllCharactersButton.addEventListener('click', () => {
         data.forEach(element => {
 
             showCharacters(element, charWrap);
-
             
         });  
         showCharacterData.appendChild(charWrap);
@@ -40,16 +40,16 @@ function showCharacters(data, dom){
     charBox = document.createElement('article');
     charBox.id = 'charWrap';
 
-    const {name, status, species, gender, origin, image} = data;
+    const {nombre, estado, especie, genero, origen, imagen} = data;
     showCharacterData.innerHTML = '';
 
     charBox.innerHTML = `
-        <h2>${name}</h2>
-        <p>Status: ${status}</p>
-        <p>Species: ${species}</p>
-        <p>Gender: ${gender}</p>
-        <p>Origin: ${origin.name}</p>
-        <img src="${image}" alt="${name} image" />    
+        <h2>${nombre}</h2>
+        <p>Status: ${estado}</p>
+        <p>Species: ${especie}</p>
+        <p>Gender: ${genero}</p>
+        <p>Origin: ${origen}</p>
+        <img src="${imagen}" alt="${nombre} image" />    
     `;   
     
     dom.append(charBox);
