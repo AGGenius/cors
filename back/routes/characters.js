@@ -9,18 +9,10 @@ router.get('/characters', async (req, res) => {
         const response = await axios.get(apiEndP);
         const characters = [];
 
-        const data = response.data;
+        const data = response.data.results;
 
-        data.results.forEach(element => {
-            const {name, status, species, gender, origin, image} = element
-            const character = {
-                "nombre": name,
-                "estado": status,
-                "especie": species,
-                "genero": gender,
-                "origen": origin.name,
-                "imagen": image
-            };
+        data.forEach(element => {
+            const character = extractCharacterData(element);
             characters.push(character);
         });
 
@@ -39,21 +31,26 @@ router.get('/characters/:name', async (req, res) => {
 
         const data = response.data.results;
 
-        const {name, status, species, gender, origin, image} = data[0]
-        const character = {
-            "nombre": name,
-            "estado": status,
-            "especie": species,
-            "genero": gender,
-            "origen": origin.name,
-            "imagen": image
-        };
-
+        const character = extractCharacterData(data[0]);
 
         res.json(character); // Solo lanzamos el resultado mas cercano a la busqueda, que sera el primero.
     } catch(err) {
         res.status(404).json({ error: `${charName} isn't in our database. Err: ${err}`});
     }
-})
+});
+
+function extractCharacterData(data) {
+    const {name, status, species, gender, origin, image} = data;
+    const character = {
+        "nombre": name,
+        "estado": status,
+        "especie": species,
+        "genero": gender,
+        "origen": origin.name,
+        "imagen": image
+    };
+
+    return character;
+}
 
 module.exports = router;
